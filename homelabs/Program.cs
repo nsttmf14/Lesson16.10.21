@@ -23,7 +23,7 @@ namespace homelabs
                 Console.WriteLine($"Номер дома: {keyValue.Value.numberOfHome}\nВысота дома: {keyValue.Value.height}\nКоличество этажей в доме: {keyValue.Value.countFloors}\nКоличество квартир в доме: {keyValue.Value.countApartments}" +
                 $"\nКоличество подъездов в доме: {keyValue.Value.countEntrance}");
                 double average = keyValue.Value.height / keyValue.Value.countFloors;
-                Console.WriteLine($"Средняя высота этажа для дома: {Math.Round(average, 2)}м.");
+                Console.WriteLine($"Средняя высота, которую занимает один этаж в этом доме: {Math.Round(average, 2)}м.");
             }
         }
         public void CountApartmentsInEntrance(Dictionary<byte, Home> Houses) //вычисление количества квартир в подъезде
@@ -46,20 +46,20 @@ namespace homelabs
             List<byte> randomList = new List<byte>();
             Console.Write("Введите количество зданий: ");
             byte.TryParse(Console.ReadLine(), out byte countHomes);
-            byte numderHome = 0;
+            byte numberHome = 0;
             while (countHomes != 0)
             {
                 Home newHome;
 
             random:
-                byte coincidences = (byte)rnd.Next(1, 100); //генерация случайного номера дома...
+                byte coincidences = (byte)rnd.Next(1, 100); //генерация случайного номера дома
                 if (randomList.Contains(coincidences))
                 {
                     goto random;
                 }
                 else
                 {
-                    randomList.Add(coincidences); //...и без повторений
+                    randomList.Add(coincidences); //нужно для того, если вдруг рандомное число повторится
                     newHome.numberOfHome = Convert.ToByte(coincidences);
                 }
                 Console.WriteLine("Номер дома: " + newHome.numberOfHome);
@@ -68,31 +68,27 @@ namespace homelabs
                 string height = Console.ReadLine();
                 float.TryParse(height, out newHome.height);
 
-                Console.Write("Введите количество этажей в доме (max = 255): "); //этажи в доме
+                Console.Write("Введите количество этажей в доме: "); //этажи в доме
                 string floors = Console.ReadLine();
-                if (!byte.TryParse(floors, out newHome.countFloors))
-                {
-                    throw new Exception("Ошибка: введено некорректное значение.");
-                }
+                byte.TryParse(floors, out newHome.countFloors);//проверяет, чтобы были введены только числа
 
                 Console.Write("Введите количество квартир в доме: "); //квартиры в доме
                 string apartments = Console.ReadLine();
                 int.TryParse(apartments, out newHome.countApartments);
 
-                Console.Write("Введите количество подьездов в доме (max = 255): "); //подъезды в доме
+                Console.Write("Введите количество подъездов в доме: "); //подъезды в доме
                 string entrances = Console.ReadLine();
-                if (!byte.TryParse(entrances, out newHome.countEntrance))
-                {
-                    throw new Exception("Ошибка: введено некоректное значение.");
-                }
+                byte.TryParse(entrances, out newHome.countEntrance);
                 Houses.Add(newHome.numberOfHome, newHome);
-                numderHome++;
+                numberHome++;
                 countHomes--;
             }
 
             var obj = new House();
             obj.HeightOfFloor(Houses);
             obj.CountApartmentsInEntrance(Houses);
+
+            Console.ReadKey();
         }
     }
 

@@ -20,7 +20,7 @@ namespace Lesson16._10._21
             public double balance;
             public TypeAcc type;
         }
-        public Dictionary<byte, Account> CreateAndPrintAccounts(Dictionary<byte, Account> Accounts)
+        public Dictionary<byte, Account> CreateAndPrintAccounts(Dictionary<byte, Account> Accounts)//все в одном методе
         {
             byte accountNumber = 0;
             int coincidences;
@@ -28,7 +28,7 @@ namespace Lesson16._10._21
             List<int> randomList = new List<int>();
             Console.Write("Введите количество банковских счетов: ");
             byte.TryParse(Console.ReadLine(), out byte accountCount);
-            while (accountNumber <= (accountCount + 1))
+            while (accountCount!=0)
             {
                 Account newUser;
 
@@ -56,7 +56,7 @@ namespace Lesson16._10._21
                 accountNumber++;
                 accountCount--;
             }
-            foreach (KeyValuePair<byte, Account> keyValue in Accounts) //печать директории аккаунтов
+            foreach (KeyValuePair<byte, Account> keyValue in Accounts) //печать всех аккаунтов
             {
                 Console.WriteLine($"Тип {keyValue.Key + 1} счёта : {keyValue.Value.type}\nНомер {keyValue.Key + 1} счёта: {keyValue.Value.number}\nБаланс {keyValue.Key + 1} счёта: {keyValue.Value.balance}");
             }
@@ -72,7 +72,8 @@ namespace Lesson16._10._21
                 var obj = new BankAccount();
                 obj.CreateAndPrintAccounts(Accounts);
 
-            }
+                Console.ReadKey();
+            } 
         }
     }
 }
