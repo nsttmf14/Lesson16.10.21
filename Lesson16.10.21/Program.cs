@@ -55,7 +55,7 @@ namespace labs
             public Seller(string name, string lastname, double salary, byte experience) : base(name, lastname)
             {
                 Salary = salary;
-                Experience = Experience;
+                Experience = experience;
             }
             public Seller(string name, string lastname, double salary)
             {
@@ -106,7 +106,7 @@ namespace labs
                     case Country.Britannia:
                         return 350000;
                     default:
-                        throw new Exception("Страны не сущетсвует!");
+                        throw new Exception("Страны не существует!");
                 }
             }
         }
