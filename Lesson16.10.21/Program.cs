@@ -14,7 +14,7 @@ namespace labs
             USA,
             Russian,
             Australia,
-            Britannia,
+            GreatBritain,
         }
         abstract class Human
         {
@@ -103,7 +103,7 @@ namespace labs
                         return 20000;
                     case Country.Australia:
                         return 300000;
-                    case Country.Britannia:
+                    case Country.GreatBritain:
                         return 350000;
                     default:
                         throw new Exception("Страны не существует!");
@@ -126,7 +126,7 @@ namespace labs
             }
             Seller seller = new Seller();
             Console.WriteLine("Введите имя кассира: ");
-            seller.Name = Console.ReadLine();
+            seller.Name = Console.ReadLine(); 
             Console.WriteLine("Введите фамилию кассира: ");
             seller.LastName = Console.ReadLine();
             Console.WriteLine("Введите зарплату кассира: ");

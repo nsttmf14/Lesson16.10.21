@@ -7,75 +7,110 @@ using System.Threading.Tasks;
 
 namespace Lesson16._10._21
 {
-    class BankAccount
+
+    class program
     {
-        public enum TypeAcc
+        private enum TypeAcc
         {
             currentAccount = 1,
             savingAccount
         }
-        public struct Account
+
+        private static int number;
+        private static double balance;
+        private static TypeAcc type;
+        static string Create()//создаем счет
         {
-            public int number;
-            public double balance;
-            public TypeAcc type;
-        }
-        public Dictionary<byte, Account> CreateAndPrintAccounts(Dictionary<byte, Account> Accounts)//все в одном методе
-        {
-            byte accountNumber = 0;
-            int coincidences;
             Random rnd = new Random();
+            int coincidences;
             List<int> randomList = new List<int>();
-            Console.Write("Введите количество банковских счетов: ");
-            byte.TryParse(Console.ReadLine(), out byte accountCount);
-            while (accountCount!=0)
+            Console.Write("1. Текущий счёт (current account)\n2. Сберегательный счёт (saving account) \nВыберите тип счёта: ");
+            type = (TypeAcc)Convert.ToByte(Console.ReadLine());
+        random:
+            coincidences = rnd.Next(1, 999999);
+            if (randomList.Contains(coincidences))//проверяем, чтобы рандомный номер не совпадал
             {
-                Account newUser;
-
-                Console.Write("1. Текущий счёт \n2. Сберегательный счёт \nВыберите счёт: ");
-                newUser.type = (TypeAcc)Convert.ToByte(Console.ReadLine());
-
-            random:
-                coincidences = rnd.Next(1, 999999);
-                if (randomList.Contains(coincidences))
-                {
-                    goto random;
-                }
-                else
-                {
-                    randomList.Add(coincidences);
-                    newUser.number = Convert.ToInt32(coincidences);
-                }
-                Console.WriteLine("номер: " + newUser.number);
-
-                Console.Write("Введите баланс: ");
-                string balance = Console.ReadLine();
-                double.TryParse(balance, out newUser.balance);
-
-                Accounts.Add(accountNumber, newUser);
-                accountNumber++;
-                accountCount--;
+                goto random;
             }
-            foreach (KeyValuePair<byte, Account> keyValue in Accounts) //печать всех аккаунтов
+            else
             {
-                Console.WriteLine($"Тип {keyValue.Key + 1} счёта : {keyValue.Value.type}\nНомер {keyValue.Key + 1} счёта: {keyValue.Value.number}\nБаланс {keyValue.Key + 1} счёта: {keyValue.Value.balance}");
+                randomList.Add(coincidences);
+                number = Convert.ToInt32(coincidences);
             }
-            return Accounts;
+            Console.WriteLine("Номер сгенерирован случайно, без повторений.");
+            Console.Write("Введите баланс: ");
+            string input = Console.ReadLine();
+            double.TryParse(input, out balance);
+            string account = type + " " + number + " " + balance;
+            return account;
         }
-        class program : BankAccount
+        static void Print(string account)//печатаем счет
         {
-
-            static void Main(string[] args)
+            string[] acc = account.Split();
+            Console.WriteLine($"\n1.Тип счёта: {acc[0]}\n2.Номер счёта {acc[1]}\n3.Баланс счёта: {acc[2]}");
+        }
+        static string Transaction(string account)//для транзакций
+        {
+            string[] acc = account.Split();
+            Console.WriteLine("1.Снять наличные\n2Пополнить счёт");
+        transaction:
+            if (!byte.TryParse(Console.ReadLine(), out byte choise) | choise > 2)
             {
+                Console.WriteLine("Ошибка: введено некорректное значение. Повторите ввод:");
+                goto transaction;
+            }
+            Console.Write("Введите сумму транзакции: ");
+            double.TryParse(Console.ReadLine(), out double transfer);
+            double Buffer = Convert.ToDouble(acc[2]);
+            if (choise.Equals(1))
+            {
+                Console.WriteLine("Спасибо, наличные сняты");
+                Buffer -= transfer;
+            }
+            else
+            {
+                Console.WriteLine("Спасибо, деньги зачислены");
+                Buffer += transfer;
+            }
+            acc[2] = Convert.ToString(Buffer);
+            Console.WriteLine("Текущий баланс счёта: " + acc[2]);
+            return account = acc[0] + " " + acc[1] + " " + acc[2]; //сохранение нового баланса счёта
+        }
 
-                Dictionary<byte, Account> Accounts = new Dictionary<byte, Account>();
-                var obj = new BankAccount();
-                obj.CreateAndPrintAccounts(Accounts);
-
-                Console.ReadKey();
-            } 
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Task 8.1");
+            Console.WriteLine("Создание счёта.");
+            string account = Create();
+        start:
+            Console.WriteLine("* * * Меню * * *");
+            Console.WriteLine("1.Напечатать информацию о счёте");
+            Console.WriteLine("2.Транзакция");
+            Console.Write("Выберите. ");
+        restart:
+            if (!byte.TryParse(Console.ReadLine(), out byte choice) | choice > 2)
+            {
+                Console.WriteLine("Ошибка: введено некорректное значение. Повторите ввод: ");
+                goto restart;
+            }
+            else
+            {
+                switch (choice)
+                {
+                    case 1:
+                        {
+                            Print(account); goto start; //печать данных о счёте
+                        }
+                    case 2:
+                        {
+                            account = Transaction(account); //транзакция
+                            break;
+                        }
+                }
+            }
         }
     }
 }
+
 
 

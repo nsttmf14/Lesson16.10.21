@@ -6,51 +6,31 @@ using System.Threading.Tasks;
 
 namespace homelabs
 {
-    class House
+    class Homework
     {
-        public struct Home
+        private void HeightOfFloor(ref float height, ref byte countFloors) //вычисления высоты, которую занимает каждый этаж
         {
-            public byte numberOfHome;
-            public float height;
-            public byte countFloors;
-            public int countApartments;
-            public byte countEntrance;
+            double Average = height / countFloors;
+            Console.WriteLine($"Средняя высота этажа для дома: {Math.Round(Average, 2)}м.");
         }
-        public void HeightOfFloor(Dictionary<byte, Home> Houses) //вычисления высоты, которую занимает каждый этаж
+        private void CountApartmentsInEntrance(ref int countApartments, ref byte countEntrance) //вычисление количества квартир в подъезде
         {
-            foreach (KeyValuePair<byte, Home> keyValue in Houses)
-            {
-                Console.WriteLine($"Номер дома: {keyValue.Value.numberOfHome}\nВысота дома: {keyValue.Value.height}\nКоличество этажей в доме: {keyValue.Value.countFloors}\nКоличество квартир в доме: {keyValue.Value.countApartments}" +
-                $"\nКоличество подъездов в доме: {keyValue.Value.countEntrance}");
-                double average = keyValue.Value.height / keyValue.Value.countFloors;
-                Console.WriteLine($"Средняя высота, которую занимает один этаж в этом доме: {Math.Round(average, 2)}м.");
-            }
+            double Average = countApartments / countEntrance;
+            Console.WriteLine($"Среднее количество квартир в каждом подъезде этого дома: {Math.Round(Average, 1)}");
         }
-        public void CountApartmentsInEntrance(Dictionary<byte, Home> Houses) //вычисление количества квартир в подъезде
-        {
-            foreach (KeyValuePair<byte, Home> keyValue in Houses)
-            {
-                Console.WriteLine($"Номер дома: {keyValue.Value.numberOfHome}\nВысота дома: {keyValue.Value.height}\nКоличество этажей в доме: {keyValue.Value.countFloors}\nКоличество квартир в доме: {keyValue.Value.countApartments}" +
-                $"\nКоличество подъездов в доме: {keyValue.Value.countEntrance}");
-                double countApartments = keyValue.Value.countApartments / keyValue.Value.countEntrance;
-                Console.WriteLine($"Среднее количество квартир в каждом подъезде этого дома: {Math.Round(countApartments, 1)}");
-            }
-        }
-    }
-    class Homework : House
-    {
         static void Main(string[] args)
         {
-            Dictionary<byte, Home> Houses = new Dictionary<byte, Home>();
+            byte numberOfHome;
+            float height;
+            byte countFloors;
+            int countApartments;
+            byte countEntrance;
             Random rnd = new Random();
             List<byte> randomList = new List<byte>();
-            Console.Write("Введите количество зданий: ");
-            byte.TryParse(Console.ReadLine(), out byte countHomes);
-            byte numberHome = 0;
-            while (countHomes != 0)
+            Console.Write("Введите количество домов: ");
+            byte.TryParse(Console.ReadLine(), out byte count);
+            while (count != 0)
             {
-                Home newHome;
-
             random:
                 byte coincidences = (byte)rnd.Next(1, 100); //генерация случайного номера дома
                 if (randomList.Contains(coincidences))
@@ -59,37 +39,41 @@ namespace homelabs
                 }
                 else
                 {
-                    randomList.Add(coincidences); //нужно для того, если вдруг рандомное число повторится
-                    newHome.numberOfHome = Convert.ToByte(coincidences);
+                    randomList.Add(coincidences);//случайный номер без повторений
+                    numberOfHome = Convert.ToByte(coincidences);
+                    Console.WriteLine("Номер дома (случайный): " + numberOfHome);
                 }
-                Console.WriteLine("Номер дома: " + newHome.numberOfHome);
 
                 Console.Write("Введите высоту дома (в метрах): "); //высота дома
-                string height = Console.ReadLine();
-                float.TryParse(height, out newHome.height);
+                float.TryParse(Console.ReadLine(), out height);
 
                 Console.Write("Введите количество этажей в доме: "); //этажи в доме
                 string floors = Console.ReadLine();
-                byte.TryParse(floors, out newHome.countFloors);//проверяет, чтобы были введены только числа
+                if (!byte.TryParse(floors, out countFloors))
+                {
+                    throw new Exception("Ошибка: введено некорректное значение.");
+                }
 
                 Console.Write("Введите количество квартир в доме: "); //квартиры в доме
                 string apartments = Console.ReadLine();
-                int.TryParse(apartments, out newHome.countApartments);
+                int.TryParse(apartments, out countApartments);
 
-                Console.Write("Введите количество подъездов в доме: "); //подъезды в доме
+                Console.Write("Введите количество подьездов в доме: "); //подъезды в доме
                 string entrances = Console.ReadLine();
-                byte.TryParse(entrances, out newHome.countEntrance);
-                Houses.Add(newHome.numberOfHome, newHome);
-                numberHome++;
-                countHomes--;
-            }
+                if (!byte.TryParse(entrances, out countEntrance))
+                {
+                    throw new Exception("Ошибка: введено некоректное значение.");
+                }
+                var Method = new Homework();
+                Method.HeightOfFloor(ref height, ref countFloors);
+                Method.CountApartmentsInEntrance(ref countApartments, ref countEntrance);
 
-            var obj = new House();
-            obj.HeightOfFloor(Houses);
-            obj.CountApartmentsInEntrance(Houses);
+                count--;
+            }
 
             Console.ReadKey();
         }
+        
     }
-
 }
+
